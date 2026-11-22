@@ -6,7 +6,7 @@ public class Transaction {
     private int transactionID;
     private String type;
     private double amount;
-    private fina LocalDateTime date;
+    private final LocalDateTime date;
 
     public int getTransactionID() {
         return transactionID;

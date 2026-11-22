@@ -10,8 +10,8 @@ private LocalDate dateOfBirth;
 private String gender;
 
 
-    public Individual(int contact, String email,String address ,int nationalID, String firstname, String surname, LocalDate dateOfBirth, String gender) {
-        super(contact, email, address);
+    public Individual(int contact, String email,String address ,String pin, int nationalID, String firstname, String surname, LocalDate dateOfBirth, String gender) {
+        super(contact, email, address, pin);
         this.nationalID = nationalID;
         this.firstname = firstname; 
         this.surname = surname;

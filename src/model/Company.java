@@ -5,8 +5,8 @@ private int registrationID;
 private String companyName;
 private String Address;
 
-public Company(int contact,String email, String address,int registrationID,String companyName){
-super(contact, email, address);
+public Company(int contact,String email, String address,String pin, int registrationID,String companyName){
+super(contact, email, address, pin);
 this.registrationID= registrationID;
 this.companyName= companyName;
 

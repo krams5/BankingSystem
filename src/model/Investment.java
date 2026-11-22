@@ -13,9 +13,10 @@ public class Investment extends Account implements InterestBearing {
 
     @Override
     public void payInterest(){
-        new balance= deposit(balance) + double interest;
+        double interest= calculateInterest();
+        deposit(interest);
     }
-    public Investment(double monthlyInterestRate, double minimumOpeningDeposit, int accountNumber, double balance, String branch) {
+    public Investment(int accountNumber, double balance, String branch) {
         super(accountNumber, balance, branch);
 
         if (balance < minimumOpeningDeposit) {
@@ -25,8 +26,18 @@ public class Investment extends Account implements InterestBearing {
 
 
         }
+        }
+    @Override
+    public void withdraw(double amount) {
+        if (amount <= 0 || amount > getBalance()) {
+            throw new IllegalArgumentException("Invalid withdrawal amount");
+        }
+        reduceBalance(amount);
     }
+}
 
 
 
-    }
+
+
+
