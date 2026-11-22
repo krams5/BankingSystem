@@ -1,4 +1,8 @@
 package model;
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalDate;
+
 
 public abstract class Account {
     private int accountNumber;
@@ -35,6 +39,7 @@ public abstract class Account {
         this.branch = branch;
     }
 
+
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Deposit must be greater than zero");
@@ -42,11 +47,9 @@ public abstract class Account {
         balance += amount;
     }
 
-
     protected void increaseBalance(double amount) {
         balance += amount;
     }
-
 
     public void withdraw(double amount) {
     }
@@ -54,4 +57,5 @@ public abstract class Account {
     protected void reduceBalance(double amount) {
         balance -= amount;
     }
+
 }
