@@ -10,47 +10,63 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Customer;
 
-    public class LoginView {
-        private Stage stage;
-        private LoginController loginController = new LoginController();
+/** Boundary class: customer login with email and a 4-digit PIN, plus a button to the bank teller screen. */
+public class LoginView {
+    private static final String BACKGROUND = "-fx-background-color: #eef4fb;";
+    private static final String PRIMARY = "-fx-background-color: #1f5fa8; -fx-text-fill: white;";
+    private static final String SECONDARY = "-fx-background-color: white; -fx-text-fill: #1f5fa8; -fx-border-color: #1f5fa8;";
 
-        public LoginView(Stage stage) {
-            this.stage = stage;
-        }
+    private final Stage stage;
+    private final LoginController loginController = new LoginController();
 
-        public void show() {
-            Label title = new Label("Botswana Banking System");
-            title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-
-            TextField contactField = new TextField();
-            contactField.setPromptText("Contact Number (e.g. 71234567)");
-
-            PasswordField pinField = new PasswordField();
-            pinField.setPromptText("4-Digit PIN");
-
-            Button loginBtn = new Button("Login");
-            loginBtn.setMaxWidth(Double.MAX_VALUE);
-
-            Label statusLabel = new Label();
-            statusLabel.setStyle("-fx-text-fill: red;");
-
-            loginBtn.setOnAction(e -> {
-                try {
-                    Customer customer = loginController.login(contactField.getText(), pinField.getText());
-                    AccountView accountView = new AccountView(stage, customer, new AccountController());
-                    accountView.show();
-                } catch (Exception ex) {
-                    statusLabel.setText(ex.getMessage());
-                }
-            });
-
-            VBox root = new VBox(12, title, contactField, pinField, loginBtn, statusLabel);
-            root.setPadding(new Insets(25));
-            root.setAlignment(Pos.CENTER);
-
-            stage.setScene(new Scene(root, 360, 260));
-            stage.setTitle("Login");
-            stage.show();
-        }
+    public LoginView(Stage stage) {
+        this.stage = stage;
     }
+
+    public void show() {
+        Label title = new Label("Botswana Banking System");
+        title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #12396b;");
+
+        TextField emailField = new TextField();
+        emailField.setPromptText("Email address");
+
+        PasswordField pinField = new PasswordField();
+        pinField.setPromptText("4-digit PIN");
+        // accepts digits only, and no more than 4 of them
+        pinField.setTextFormatter(new TextFormatter<String>(
+                change -> change.getControlNewText().matches("[0-9]{0,4}") ? change : null));
+
+        Button loginBtn = new Button("Login");
+        loginBtn.setMaxWidth(Double.MAX_VALUE);
+        loginBtn.setDefaultButton(true);
+        loginBtn.setStyle(PRIMARY);
+
+        Button tellerBtn = new Button("Register new customer (bank teller)");
+        tellerBtn.setMaxWidth(Double.MAX_VALUE);
+        tellerBtn.setStyle(SECONDARY);
+
+        Label statusLabel = new Label();
+        statusLabel.setStyle("-fx-text-fill: red;");
+
+        loginBtn.setOnAction(e -> {
+            try {
+                Customer customer = loginController.login(emailField.getText(), pinField.getText());
+                new AccountView(stage, customer, new AccountController()).show();
+            } catch (Exception ex) {
+                statusLabel.setText(ex.getMessage() == null ? ex.toString() : ex.getMessage());
+                pinField.clear();
+            }
+        });
+        tellerBtn.setOnAction(e -> new TellerView(stage).show());
+
+        VBox root = new VBox(12, title, emailField, pinField, loginBtn, statusLabel, tellerBtn);
+        root.setPadding(new Insets(25));
+        root.setAlignment(Pos.CENTER);
+        root.setStyle(BACKGROUND);
+
+        stage.setScene(new Scene(root, 380, 340));
+        stage.setTitle("Login");
+        stage.show();
+    }
+}
 
